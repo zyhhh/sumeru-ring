@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 0.0.0.0",
     "build": "vue-tsc -b && vite build",
     "typecheck": "vue-tsc -b",
     "test": "vitest run",
@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@zxing/browser": "^0.1.5",
+    "diff": "^9.0.0",
     "element-plus": "^2.11.1",
     "jose": "^6.1.0",
     "lucide-vue-next": "^0.468.0",
@@ -24,8 +25,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
-    "@types/node": "^22.17.1",
     "@tsconfig/node22": "^22.0.2",
+    "@types/node": "^22.17.1",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vitest/coverage-v8": "^3.2.4",
     "@vue/test-utils": "^2.4.6",

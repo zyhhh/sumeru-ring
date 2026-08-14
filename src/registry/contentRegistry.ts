@@ -7,6 +7,7 @@ export const contentRegistry: ContentItem[] = [
   { id: 'json', type: 'tool', title: 'JSON 工具', description: '格式化、转义、去转义与压缩 JSON', category: '开发辅助', tags: ['JSON', '格式化'], keywords: ['escape', 'pretty', '压缩'], route: '/tools/json', icon: 'Braces' },
   { id: 'url-codec', type: 'tool', title: 'URL 编解码', description: '编码或还原 URL 与查询参数', category: '编码转换', tags: ['URL', '编码'], keywords: ['encodeURI', 'decodeURI', 'component'], route: '/tools/url-codec', icon: 'Link' },
   { id: 'character-count', type: 'tool', title: '字符数统计', description: '分类统计字符并计算加权总数', category: '文本处理', tags: ['字符', '统计'], keywords: ['汉字', '标点', '长度'], route: '/tools/character-count', icon: 'TextCursorInput' },
+  { id: 'text-diff', type: 'tool', title: '文本比较', description: '以 Git 风格查看两段文本的行级和行内差异', category: '文本处理', tags: ['文本', 'Diff'], keywords: ['比较', '差异', 'diff', 'git'], route: '/tools/text-diff', icon: 'FileDiff' },
 ]
 
 export function searchContent(query: string): ContentItem[] {
@@ -20,4 +21,3 @@ export function searchContent(query: string): ContentItem[] {
       .includes(normalized),
   )
 }
-

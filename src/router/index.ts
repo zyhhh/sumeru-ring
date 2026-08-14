@@ -10,6 +10,7 @@ const router = createRouter({
     { path: '/tools/json', name: 'tool-json', component: () => import('@/features/json/views/JsonToolView.vue'), meta: { navigation: 'tools' } },
     { path: '/tools/url-codec', name: 'tool-url-codec', component: () => import('@/features/url-codec/views/UrlCodecToolView.vue'), meta: { navigation: 'tools' } },
     { path: '/tools/character-count', name: 'tool-character-count', component: () => import('@/features/character-count/views/CharacterCountToolView.vue'), meta: { navigation: 'tools' } },
+    { path: '/tools/text-diff', name: 'tool-text-diff', component: () => import('@/features/text-diff/views/TextDiffToolView.vue'), meta: { navigation: 'tools' } },
     { path: '/links', name: 'links', component: () => import('@/features/links/views/LinkNavigationView.vue'), meta: { navigation: 'links' } },
     { path: '/links/manage', name: 'link-manager', component: () => import('@/features/links/views/LinkManagerView.vue'), meta: { navigation: 'links' } },
     { path: '/:pathMatch(.*)*', redirect: '/' },
