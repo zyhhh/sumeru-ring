@@ -12,7 +12,7 @@ const preview = ref<HTMLElement>()
 const logo = ref('')
 const decodeResult = ref('')
 const decodeError = ref('')
-const form = ref<QrForm>({ type: 'text', text: 'https://example.com', ssid: '', password: '', encryption: 'WPA', name: '', phone: '', email: '', subject: '' })
+const form = ref<QrForm>({ type: 'text', text: '', ssid: '', password: '', encryption: 'WPA', name: '', phone: '', email: '', subject: '' })
 const size = ref(512)
 const level = ref<'L' | 'M' | 'Q' | 'H'>('H')
 const foreground = ref('#2869C7')
@@ -38,7 +38,11 @@ onMounted(async () => {
   if (preview.value) qr.append(preview.value)
 })
 
-watch([content, size, level, foreground, background, dots, corners, logo], () => qr?.update(qrOptions()))
+watch([content, size, level, foreground, background, dots, corners, logo], async () => {
+  qr?.update(qrOptions())
+  await nextTick()
+  if (content.value && preview.value && !preview.value.hasChildNodes()) qr?.append(preview.value)
+})
 
 // ElUpload 不自动上传文件，只负责提供统一的选择与拖拽交互。
 function selectLogo(uploadFile: UploadFile) {
@@ -100,11 +104,11 @@ const docs = [
 
         <h2>外观设置</h2>
         <div class="form-grid"><el-select v-model="size"><el-option v-for="value in [256, 512, 768, 1024]" :key="value" :label="`${value} × ${value}`" :value="value" /></el-select><el-select v-model="level"><el-option label="L · 约 7%" value="L" /><el-option label="M · 约 15%" value="M" /><el-option label="Q · 约 25%" value="Q" /><el-option label="H · 约 30%" value="H" /></el-select><el-select v-model="dots"><el-option label="方形点阵" value="square" /><el-option label="圆点" value="dots" /><el-option label="圆角点阵" value="rounded" /></el-select><el-select v-model="corners"><el-option label="方形定位点" value="square" /><el-option label="圆形定位点" value="dot" /><el-option label="大圆角定位点" value="extra-rounded" /></el-select><label>前景色<el-color-picker v-model="foreground" /></label><label>背景色<el-color-picker v-model="background" /></label></div>
-        <div class="upload-actions"><el-upload :auto-upload="false" :show-file-list="false" accept="image/png,image/jpeg,image/svg+xml" :on-change="selectLogo"><el-button class="sr-secondary-button">选择中心 Logo</el-button></el-upload><el-button v-if="logo" @click="logo = ''">移除 Logo</el-button></div>
+        <div class="upload-actions"><el-upload :auto-upload="false" :show-file-list="false" accept="image/png,image/jpeg,image/svg+xml" :on-change="selectLogo"><el-button>选择中心 Logo</el-button></el-upload><el-button v-if="logo" @click="logo = ''">移除 Logo</el-button></div>
         <div class="tip">添加 Logo 时建议使用 H 级纠错，并保持前景与背景有足够对比度。</div>
       </div>
 
-      <div class="preview sr-panel"><h2>实时预览</h2><div ref="preview" class="qr-preview"></div><span>{{ size }} × {{ size }} · {{ level }} 级纠错</span><div><el-button class="sr-primary-button" type="primary" @click="download('png')">下载 PNG</el-button><el-button class="sr-secondary-button" @click="download('svg')">下载 SVG</el-button></div></div>
+      <div class="preview sr-panel"><h2>实时预览</h2><div v-if="content" ref="preview" class="qr-preview"></div><div v-else class="qr-empty">输入内容后显示二维码预览</div><span>{{ size }} × {{ size }} · {{ level }} 级纠错</span><div><el-button class="sr-primary-button" type="primary" :disabled="!content" @click="download('png')">下载 PNG</el-button><el-button :disabled="!content" @click="download('svg')">下载 SVG</el-button></div></div>
     </section>
 
     <section v-else class="decoder sr-panel">
@@ -119,6 +123,6 @@ const docs = [
 
 <style scoped lang="scss">
 .qr-tabs{margin-bottom:18px}.qr-tabs :deep(.el-tabs__item){font-size:14px;font-weight:600}.qr-tabs :deep(.el-tabs__active-bar){background:var(--sr-orange)}.qr-tabs :deep(.el-tabs__item.is-active){color:var(--sr-orange)}
-.workspace{display:grid;grid-template-columns:minmax(0,2fr) minmax(230px,1fr);gap:14px;align-items:start}.config,.preview,.decoder{padding:20px}.config h2,.preview h2,.decoder h2{margin:0 0 15px;font-size:15px}.config h2:not(:first-child){margin-top:22px}.types{margin-bottom:15px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.form-grid label{display:flex;align-items:center;gap:9px;color:var(--sr-text-muted);font-size:13px;font-weight:600}.upload-actions{display:flex;gap:8px;margin-top:12px}.tip{margin-top:14px;padding:12px;border-left:3px solid var(--sr-orange);background:var(--sr-orange-soft);font-size:13px;line-height:1.6}.preview{text-align:center}.qr-preview{display:flex;justify-content:center;min-height:320px}.preview span{display:block;margin:10px 0 14px;color:var(--sr-text-muted);font-size:12px}.decoder{min-height:350px;text-align:center}.decoder p{color:var(--sr-text-muted);font-size:13px}.decoder :deep(.el-upload){width:100%}.decoder :deep(.el-upload-dragger){border-color:var(--sr-border);background:var(--sr-surface-soft)}.upload-title{color:var(--sr-blue);font-size:15px;font-weight:600}.upload-subtitle{margin-top:6px;color:var(--sr-text-muted);font-size:12px}.decoded{margin-top:22px;text-align:left}.decoded span{font-size:12px;color:var(--sr-text-muted)}.decoded pre{padding:14px;border-radius:var(--sr-radius-control);background:var(--sr-surface-soft);font-size:13px;line-height:1.6;white-space:pre-wrap;word-break:break-all}.error{color:#c43f3f!important}
+.workspace{display:grid;grid-template-columns:minmax(0,2fr) minmax(230px,1fr);gap:14px;align-items:start}.config,.preview,.decoder{padding:20px}.config h2,.preview h2,.decoder h2{margin:0 0 15px;font-size:15px}.config h2:not(:first-child){margin-top:22px}.types{margin-bottom:15px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.form-grid label{display:flex;align-items:center;gap:9px;color:var(--sr-text-muted);font-size:13px;font-weight:600}.upload-actions{display:flex;gap:8px;margin-top:12px}.tip{margin-top:14px;padding:12px;border-left:3px solid var(--sr-orange);background:var(--sr-orange-soft);font-size:13px;line-height:1.6}.preview{text-align:center}.qr-preview{display:flex;justify-content:center;min-height:320px}.qr-empty{display:grid;place-items:center;min-height:320px;color:var(--sr-text-muted);font-size:13px}.preview span{display:block;margin:10px 0 14px;color:var(--sr-text-muted);font-size:12px}.decoder{min-height:350px;text-align:center}.decoder p{color:var(--sr-text-muted);font-size:13px}.decoder :deep(.el-upload){width:100%}.decoder :deep(.el-upload-dragger){border-color:var(--sr-border);background:var(--sr-surface-soft)}.upload-title{color:var(--sr-blue);font-size:15px;font-weight:600}.upload-subtitle{margin-top:6px;color:var(--sr-text-muted);font-size:12px}.decoded{margin-top:22px;text-align:left}.decoded span{font-size:12px;color:var(--sr-text-muted)}.decoded pre{padding:14px;border-radius:var(--sr-radius-control);background:var(--sr-surface-soft);font-size:13px;line-height:1.6;white-space:pre-wrap;word-break:break-all}.error{color:#c43f3f!important}
 @media(max-width:800px){.workspace{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}}
 </style>

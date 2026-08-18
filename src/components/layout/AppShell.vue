@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { PanelLeftClose, PanelLeftOpen, Search, X, Sun, Moon, LayoutGrid, Wrench, Star, History, ExternalLink } from 'lucide-vue-next'
-import { contentRegistry, searchContent } from '@/registry/contentRegistry'
+import { contentRegistry } from '@/registry/contentRegistry'
+import { searchUnifiedContent } from '@/registry/contentCatalog'
 import { usePreferencesStore } from '@/stores/preferences'
 import { initializeLinks, listLinks } from '@/features/links/linkRepository'
 import type { LinkItem } from '@/features/links/types'
@@ -14,13 +15,7 @@ const search = ref('')
 const searchOpen = ref(false)
 const searchInput = ref<HTMLInputElement>()
 const links = ref<LinkItem[]>([])
-const results = computed(() => {
-  if (!search.value) return []
-  const query = search.value.toLocaleLowerCase()
-  const tools = searchContent(search.value).map((item) => ({ id: item.id, title: item.title, description: item.description, target: item.route, external: false }))
-  const externalLinks = links.value.filter((item) => [item.title, item.url, item.description, item.category, ...item.tags].join(' ').toLocaleLowerCase().includes(query)).map((item) => ({ id: item.id, title: item.title, description: `${item.category} · ${item.description}`, target: item.url, external: true }))
-  return [...tools, ...externalLinks].slice(0, 8)
-})
+const results = ref<{ id: string; title: string; description: string; target: string; external: boolean; type: string }[]>([])
 const toolCount = contentRegistry.filter((item) => item.type === 'tool').length
 const activeNavigation = computed(() => route.meta.navigation)
 
@@ -41,6 +36,15 @@ function closeSearch() {
   search.value = ''
   searchOpen.value = false
 }
+
+let searchRequest = 0
+watch(search, async (value) => {
+  if (!value.trim()) { results.value = []; return }
+  const request = ++searchRequest
+  const items = await searchUnifiedContent({ query: value, limit: 8 })
+  if (request !== searchRequest) return
+  results.value = items.map((item) => ({ id: item.id, title: item.title, description: `${item.type === 'tool' ? '内置工具' : item.category} · ${item.description}`, target: item.target, external: item.external, type: item.type }))
+})
 
 onMounted(async () => {
   await initializeLinks()

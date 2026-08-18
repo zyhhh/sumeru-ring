@@ -8,20 +8,20 @@
 
 ## 2. 注册工具
 
-在 `src/registry/contentRegistry.ts` 添加一条注册项。首页概览、小工具完整列表和全局搜索会自动读取该数据，不需要分别维护卡片内容。
+在 `src/registry/contentRegistry.ts` 添加一条工具定义，包括页面的动态 `loader`。首页概览、小工具完整列表、全局搜索和工具路由会从该定义自动派生，不需要分别维护卡片或路由。
 
 网址导航属于运行时数据，不写入工具注册表。默认网址维护在 `src/features/links/defaultLinks.ts`，用户新增和修改的数据通过 `linkRepository.ts` 保存到 IndexedDB。新增网址相关能力时，页面应调用仓库函数，不要直接操作 `indexedDB`。
 
-## 3. 添加路由
+## 3. 声明工具页面加载器
 
-在 `src/router/index.ts` 中使用动态 `import()` 添加页面。动态加载可以避免用户打开首页时下载所有工具代码。工具详情路由需要设置唯一 `name`，并声明 `meta: { navigation: 'tools' }`，这样侧栏只会高亮“小工具”。
+在工具定义中使用动态 `import()` 声明页面。动态加载可以避免用户打开首页时下载所有工具代码。路由名称和侧栏元信息由内容目录统一生成，不要在 `src/router/index.ts` 重复添加工具路由。
 
 ```ts
 {
-  path: '/tools/text-diff',
-  name: 'tool-text-diff',
-  component: () => import('@/features/text-diff/views/TextDiffToolView.vue'),
-  meta: { navigation: 'tools' },
+  id: 'text-diff',
+  route: '/tools/text-diff',
+  loader: () => import('@/features/text-diff/views/TextDiffToolView.vue'),
+  // 其余标题、描述、分类、标签和图标字段省略
 }
 ```
 
@@ -114,6 +114,27 @@ function handleFile(uploadFile: UploadFile) {
 - 仅当 Element Plus 无法满足性能或功能要求时，才保留原生表单控件，并在代码注释中说明原因。
 
 ## 6. 遵循视觉与排版规范
+
+### 页面与按钮规范
+
+所有工具页遵循同一套层级，优先参考 JSON 工具的页面结构：
+
+| 位置 | 规范 |
+| --- | --- |
+| 页面标题 | `ToolPageHeader`，26px、600 字重；不要在工具页自行定义另一套标题字号 |
+| 页面说明 | 14px，使用 `--sr-text-muted`，行高 1.6 |
+| 区块标题 | 15px、600 字重，使用 `.sr-tool-section-title` |
+| 字段标签 | 13px、600 字重，使用 `.sr-tool-label` |
+| 辅助说明 | 12px，使用 `.sr-tool-help` |
+| 工具操作区 | 使用 `.sr-tool-actions`，按钮间距统一为 8px |
+
+按钮按动作重要性分级：
+
+- `.sr-primary-button`：页面唯一主操作，使用白底、橙色边框和橙色文字，例如“开始处理”“生成”“计算”；悬停时使用浅橙色背景。
+- `.sr-secondary-button`：普通辅助操作，使用橙色强调，例如“清空”“上传”“导入”“复制”。
+- `.sr-tertiary-button`：低风险或清理类操作，透明背景，例如“清空”“重置”。
+
+一个页面通常只保留一个主操作按钮。不要通过页面局部样式覆盖主按钮颜色；橙色统一使用 `--sr-orange` 设计令牌。
 
 - 正文基线为 `14px`，辅助文字通常不低于 `12px`。
 - 工具标签统一为 `12px`，使用胶囊形标签样式。

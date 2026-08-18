@@ -15,6 +15,10 @@
   --sr-font-body: 14px;
   --sr-font-secondary: 12px;
   --sr-font-label: 12px;
+  --sr-font-page-title: 26px;
+  --sr-font-section-title: 15px;
+  --sr-font-control: 13px;
+  --sr-line-body: 1.6;
   --sr-sidebar-width: 220px;
   color-scheme: light;
   font-family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
@@ -109,16 +113,22 @@ a { color: inherit; text-decoration: none; }
 }
 .el-button:hover { transform: translateY(-1px); border-color: var(--sr-blue); background: var(--sr-blue-soft); color: var(--sr-blue); }
 .el-button:active { transform: translateY(0); }
-.sr-primary-button.el-button {
-  --el-button-bg-color: var(--sr-blue);
-  --el-button-border-color: var(--sr-blue);
-  --el-button-hover-bg-color: #1f5ab2;
-  --el-button-hover-border-color: #1f5ab2;
-  --el-button-text-color: #fff;
-  --el-button-hover-text-color: #fff;
-}
-.sr-secondary-button.el-button { color: var(--sr-orange); border-color: var(--sr-orange); background: var(--sr-orange-soft); }
-.sr-secondary-button.el-button:hover { color: var(--sr-orange); border-color: var(--sr-orange); background: var(--sr-orange-soft); }
+.el-button.sr-primary-button,
+.el-button.sr-primary-button.el-button--primary { background-color: var(--sr-surface) !important; border-color: var(--sr-orange) !important; color: var(--sr-orange) !important; }
+.el-button.sr-primary-button:hover,
+.el-button.sr-primary-button.el-button--primary:hover { background-color: var(--sr-orange-soft) !important; border-color: var(--sr-orange) !important; color: var(--sr-orange) !important; }
+.sr-secondary-button.el-button { color: var(--sr-text); border-color: var(--sr-border); background: var(--sr-surface); }
+.sr-secondary-button.el-button:hover { color: var(--sr-blue); border-color: var(--sr-blue); background: var(--sr-blue-soft); }
+.sr-tertiary-button.el-button { color: var(--sr-text-muted); border-color: transparent; background: transparent; }
+.sr-tertiary-button.el-button:hover { color: var(--sr-text); border-color: var(--sr-border); background: var(--sr-surface-soft); }
+
+/* 工具页共同排版：标题、区块标题、字段标签和辅助文本使用固定层级。 */
+.tool-header h1 { font-size: var(--sr-font-page-title); line-height: 1.25; }
+.tool-header p { line-height: var(--sr-line-body); }
+.sr-tool-section-title { margin: 0; color: var(--sr-text); font-size: var(--sr-font-section-title); font-weight: 600; line-height: 1.4; }
+.sr-tool-label { color: #218a5a !important; font-size: var(--sr-font-section-title) !important; font-weight: 700 !important; line-height: 1.4; }
+.sr-tool-help { color: var(--sr-text-muted); font-size: var(--sr-font-secondary); line-height: var(--sr-line-body); }
+.sr-tool-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
 
 .el-radio-button__inner {
   min-height: 40px;
