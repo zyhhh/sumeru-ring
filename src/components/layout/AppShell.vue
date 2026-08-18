@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { PanelLeftClose, PanelLeftOpen, Search, X, Sun, Moon, LayoutGrid, Wrench, Star, History, ExternalLink } from 'lucide-vue-next'
+import { BookOpenCheck, FileCode2, PanelLeftClose, PanelLeftOpen, Search, X, Sun, Moon, LayoutGrid, Wrench, Star, History, ExternalLink, TerminalSquare } from 'lucide-vue-next'
 import { contentRegistry } from '@/registry/contentRegistry'
 import { searchUnifiedContent } from '@/registry/contentCatalog'
 import { usePreferencesStore } from '@/stores/preferences'
@@ -17,6 +17,7 @@ const searchInput = ref<HTMLInputElement>()
 const links = ref<LinkItem[]>([])
 const results = ref<{ id: string; title: string; description: string; target: string; external: boolean; type: string }[]>([])
 const toolCount = contentRegistry.filter((item) => item.type === 'tool').length
+const typeLabels: Record<string, string> = { tool: '内置工具', link: '网址', 'command-template': '命令模板', snippet: '代码片段', cheatsheet: '速查表' }
 const activeNavigation = computed(() => route.meta.navigation)
 
 function openResult(target: string, external: boolean) {
@@ -43,7 +44,7 @@ watch(search, async (value) => {
   const request = ++searchRequest
   const items = await searchUnifiedContent({ query: value, limit: 8 })
   if (request !== searchRequest) return
-  results.value = items.map((item) => ({ id: item.id, title: item.title, description: `${item.type === 'tool' ? '内置工具' : item.category} · ${item.description}`, target: item.target, external: item.external, type: item.type }))
+  results.value = items.map((item) => ({ id: item.id, title: item.title, description: `${typeLabels[item.type]} · ${item.description}`, target: item.target, external: item.external, type: item.type }))
 })
 
 onMounted(async () => {
@@ -83,6 +84,9 @@ onMounted(async () => {
         <div class="nav-label">内容类型</div>
         <RouterLink to="/tools" :class="{ 'is-active': activeNavigation === 'tools' }"><Wrench :size="17" /><span>小工具</span><small>{{ toolCount }}</small></RouterLink>
         <RouterLink to="/links" :class="{ 'is-active': activeNavigation === 'links' }"><ExternalLink :size="17" /><span>网址导航</span><small>{{ links.length }}</small></RouterLink>
+        <RouterLink to="/commands" :class="{ 'is-active': activeNavigation === 'commands' }"><TerminalSquare :size="17" /><span>命令模板</span><small>4</small></RouterLink>
+        <RouterLink to="/snippets" :class="{ 'is-active': activeNavigation === 'snippets' }"><FileCode2 :size="17" /><span>代码片段</span></RouterLink>
+        <RouterLink to="/cheatsheets" :class="{ 'is-active': activeNavigation === 'cheatsheets' }"><BookOpenCheck :size="17" /><span>速查表</span><small>4</small></RouterLink>
       </nav>
     </aside>
 

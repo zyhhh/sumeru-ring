@@ -13,7 +13,9 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@noble/hashes": "^2.3.0",
     "@zxing/browser": "^0.1.5",
+    "cron-parser": "^5.10.0",
     "diff": "^9.0.0",
     "element-plus": "^2.11.1",
     "jose": "^6.1.0",

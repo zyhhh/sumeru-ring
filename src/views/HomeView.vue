@@ -7,6 +7,7 @@ import ViewMoreCard from '@/components/content/ViewMoreCard.vue'
 import { initializeLinks, listLinks } from '@/features/links/linkRepository'
 import type { LinkItem } from '@/features/links/types'
 import { contentRegistry } from '@/registry/contentRegistry'
+import { builtinContentTypes } from '@/registry/contentCatalog'
 
 const PREVIEW_LIMIT = 5
 const tools = contentRegistry.filter((item) => item.type === 'tool')
@@ -29,6 +30,11 @@ onMounted(async () => {
     <section class="home-heading">
       <div><p>SUMERU RING</p><h1>我的工作台</h1><span>工具与资源集中管理，所有计算均在当前浏览器内完成。</span></div>
       <div class="accent-ring"></div>
+    </section>
+
+    <section class="preview-section">
+      <div class="section-title"><h2>开发资料</h2><span>{{ builtinContentTypes.length }} TYPES</span></div>
+      <div class="content-grid"><ToolCard v-for="item in builtinContentTypes" :key="item.id" :item="item" /></div>
     </section>
 
     <section class="preview-section">

@@ -25,4 +25,9 @@ describe('content catalog', () => {
     const results = await searchUnifiedContent({ type: 'tool' })
     expect(results.every((item) => item.type === 'tool')).toBe(true)
   })
+
+  it('includes the additional content types in unified search', async () => {
+    const results = await searchUnifiedContent({ query: 'docker' })
+    expect(results.map((item) => item.type)).toEqual(expect.arrayContaining(['command-template', 'snippet']))
+  })
 })

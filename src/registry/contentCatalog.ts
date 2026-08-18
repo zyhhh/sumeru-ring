@@ -1,7 +1,7 @@
 import { listLinks } from '@/features/links/linkRepository'
 import type { LinkItem } from '@/features/links/types'
 import { contentRegistry } from './contentRegistry'
-import type { UnifiedContentItem } from '@/types/content'
+import type { ContentType, UnifiedContentItem } from '@/types/content'
 import type { RouteRecordRaw } from 'vue-router'
 
 export interface ContentProvider {
@@ -28,7 +28,13 @@ const userLinkProvider: ContentProvider = {
   load: async () => (await listLinks()).map(linkContent),
 }
 
-const contentProviders: ContentProvider[] = [builtinToolProvider, userLinkProvider]
+export const builtinContentTypes: UnifiedContentItem[] = [
+  { id: 'command-templates', type: 'command-template', source: 'builtin', title: '命令模板', description: '通过表单生成 Maven、Docker、Git 与 curl 命令', category: '开发辅助', tags: ['命令', '表单生成'], keywords: ['maven', 'docker', 'git', 'curl'], route: '/commands', icon: 'TerminalSquare', target: '/commands', external: false },
+  { id: 'code-snippets', type: 'snippet', source: 'user', title: '代码片段', description: '保存常用 SQL、Shell、Docker 与 Nginx 配置', category: '开发辅助', tags: ['代码', '本地保存'], keywords: ['sql', 'shell', 'docker', 'nginx'], route: '/snippets', icon: 'FileCode2', target: '/snippets', external: false },
+  { id: 'cheatsheets', type: 'cheatsheet', source: 'builtin', title: '速查表', description: '快速查阅 HTTP 状态码、Linux、正则与 Git 命令', category: '开发辅助', tags: ['参考', '速查'], keywords: ['http', 'linux', 'regex', 'git'], route: '/cheatsheets', icon: 'BookOpenCheck', target: '/cheatsheets', external: false },
+]
+
+const contentProviders: ContentProvider[] = [builtinToolProvider, { id: 'builtin-content-types', load: async () => builtinContentTypes }, userLinkProvider]
 
 function linkContent(link: LinkItem): UnifiedContentItem {
   return {
@@ -49,7 +55,7 @@ function linkContent(link: LinkItem): UnifiedContentItem {
 
 export interface ContentQuery {
   query?: string
-  type?: 'all' | 'tool' | 'link'
+  type?: 'all' | ContentType
   limit?: number
 }
 

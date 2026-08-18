@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { Braces, KeyRound, Link, QrCode, TextCursorInput, Wrench } from 'lucide-vue-next'
+import { Binary, BookOpenCheck, Braces, CalendarClock, Clock3, FileCode2, FileDiff, Fingerprint, Hash, KeyRound, Link, QrCode, TerminalSquare, TextCursorInput, Wrench } from 'lucide-vue-next'
 import type { ContentItem } from '@/types/content'
 
 defineProps<{ item: ContentItem }>()
 
 // 显式维护图标映射，避免打包整个图标库；新增工具图标时在此补充。
-const iconMap = { Braces, KeyRound, Link, QrCode, TextCursorInput, Wrench }
+const iconMap = { Binary, BookOpenCheck, Braces, CalendarClock, Clock3, FileCode2, FileDiff, Fingerprint, Hash, KeyRound, Link, QrCode, TerminalSquare, TextCursorInput, Wrench }
 function iconFor(name: string) {
   return iconMap[name as keyof typeof iconMap] ?? Wrench
 }
@@ -20,4 +20,3 @@ function iconFor(name: string) {
     </div>
   </RouterLink>
 </template>
-

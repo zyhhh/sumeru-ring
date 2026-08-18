@@ -1,4 +1,4 @@
-export type ContentType = 'tool' | 'link'
+export type ContentType = 'tool' | 'link' | 'command-template' | 'snippet' | 'cheatsheet'
 
 export type ContentSource = 'builtin' | 'user'
 
