@@ -27,7 +27,7 @@ onMounted(reload)
 
 <template>
   <div class="sr-page snippet-page">
-    <header class="list-heading"><div><p>CODE SNIPPETS</p><h1>代码片段</h1><span>保存常用配置与代码，数据仅存于当前浏览器。</span></div><strong>{{ filtered.length }} ITEMS</strong></header>
+    <header class="list-heading"><div><p>常用代码</p><h1>代码片段</h1><span>保存常用配置与代码，数据仅存于当前浏览器。</span></div><strong>{{ filtered.length }} 项</strong></header>
     <div class="snippet-toolbar"><el-input v-model="query" clearable placeholder="搜索名称、说明或代码" /><el-select v-model="language"><el-option label="全部类型" value="全部" /><el-option v-for="item in SNIPPET_LANGUAGES" :key="item" :label="item" :value="item" /></el-select><el-button class="sr-primary-button" type="primary" @click="openCreate"><Plus :size="16" />新增片段</el-button></div>
     <div class="snippet-grid">
       <article v-for="item in filtered" :key="item.id" class="snippet-card sr-panel">

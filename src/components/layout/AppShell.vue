@@ -56,7 +56,7 @@ onMounted(async () => {
 <template>
   <div class="app-shell" :class="{ collapsed: preferences.sidebarCollapsed }">
     <header class="app-header">
-      <RouterLink class="brand" to="/"><strong><span>SUMERU</span> <em>RING</em></strong><small>PERSONAL UTILITY WORKSPACE</small></RouterLink>
+      <RouterLink class="brand" to="/"><strong><span>SUMERU</span> <em>RING</em></strong><small>个人实用工具工作台</small></RouterLink>
       <div class="header-actions">
       <div class="global-search" :class="{ open: searchOpen }">
         <el-button v-if="!searchOpen" class="icon-button search-trigger" circle title="搜索" aria-label="打开搜索" @click="openSearch"><Search :size="19" /></el-button>

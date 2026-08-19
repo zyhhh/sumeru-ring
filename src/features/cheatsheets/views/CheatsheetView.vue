@@ -16,7 +16,7 @@ async function copy(value: string) { await navigator.clipboard.writeText(value);
 
 <template>
   <div class="sr-page sheet-page">
-    <header class="list-heading"><div><p>CHEATSHEETS</p><h1>速查表</h1><span>集中查阅开发中容易忘记的状态码、命令与语法。</span></div><BookOpenCheck :size="30" /></header>
+    <header class="list-heading"><div><p>开发速查</p><h1>速查表</h1><span>集中查阅开发中容易忘记的状态码、命令与语法。</span></div><BookOpenCheck :size="30" /></header>
     <div class="sheet-tabs"><el-button v-for="sheet in cheatsheets" :key="sheet.id" :class="{ active: activeId === sheet.id }" @click="activeId = sheet.id">{{ sheet.title }}</el-button></div>
     <section class="sheet-panel sr-panel">
       <div class="sheet-heading"><div><h2>{{ active?.title }}</h2><span>{{ entries.length }} 条</span></div><el-input v-model="query" clearable placeholder="搜索当前速查表"><template #prefix><Search :size="15" /></template></el-input></div>

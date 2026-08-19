@@ -9,11 +9,20 @@ function importHmacKey(bytes: Uint8Array, algorithm: HmacAlgorithm) {
 }
 
 export function parseJwt(token: string) {
-    return {header: decodeProtectedHeader(token), payload: decodeJwt(token), signature: token.split('.')[2] ?? ''}
+    try {
+        return {header: decodeProtectedHeader(token), payload: decodeJwt(token), signature: token.split('.')[2] ?? ''}
+    } catch {
+        throw new Error('令牌格式不正确，请确认内容完整且包含由英文句点分隔的三个部分')
+    }
 }
 
 export async function verifyHmacJwt(token: string, secret: string) {
-    const header = decodeProtectedHeader(token)
+    let header: ReturnType<typeof decodeProtectedHeader>
+    try {
+        header = decodeProtectedHeader(token)
+    } catch {
+        throw new Error('令牌格式不正确，请确认内容完整且包含由英文句点分隔的三个部分')
+    }
     const algorithm = header.alg
 
     if (!algorithm || !HMAC_ALGORITHMS.includes(algorithm as HmacAlgorithm)) {
@@ -26,7 +35,9 @@ export async function verifyHmacJwt(token: string, secret: string) {
         const result = await jwtVerify(token, key, options)
         return {...result, keyEncoding: 'UTF-8' as const}
     } catch (error) {
-        if (!(error instanceof errors.JWSSignatureVerificationFailed)) throw error
+        if (error instanceof errors.JWTExpired) throw new Error('令牌已过期，无法通过签名验证')
+        if (error instanceof errors.JWTClaimValidationFailed) throw new Error('令牌尚未生效或声明内容不符合要求')
+        if (!(error instanceof errors.JWSSignatureVerificationFailed)) throw new Error('签名验证失败，请检查令牌格式、签名算法和密钥')
     }
 
     try {
@@ -37,9 +48,11 @@ export async function verifyHmacJwt(token: string, secret: string) {
         return {...result, keyEncoding: 'Base64' as const}
     } catch (error) {
         if (error instanceof errors.JWSSignatureVerificationFailed) {
-            throw new Error('signature verification failed：UTF-8 和 Base64 两种密钥编码均不匹配')
+            throw new Error('签名验证失败：UTF-8 和 Base64 两种密钥编码均不匹配')
         }
-        throw error
+        if (error instanceof errors.JWTExpired) throw new Error('令牌已过期，无法通过签名验证')
+        if (error instanceof errors.JWTClaimValidationFailed) throw new Error('令牌尚未生效或声明内容不符合要求')
+        throw new Error('签名验证失败，请检查令牌格式、签名算法和密钥')
     }
 }
 

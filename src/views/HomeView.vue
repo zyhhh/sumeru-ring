@@ -28,7 +28,7 @@ onMounted(async () => {
 <template>
   <div class="sr-page home-page">
     <section class="home-heading">
-      <div><p>SUMERU RING</p><h1>我的工作台</h1><span>工具与资源集中管理，所有计算均在当前浏览器内完成。</span></div>
+      <div><p>须弥之戒</p><h1>我的工作台</h1><span>工具与资源集中管理，所有计算均在当前浏览器内完成。</span></div>
       <div class="accent-ring"></div>
     </section>
 

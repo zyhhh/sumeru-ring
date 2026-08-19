@@ -77,12 +77,12 @@ function run() {
 
 function enhanceError(message: string) {
   const match = message.match(/position (\d+)/)
-  if (!match) return message
+  if (!match) return /unexpected|expected|json/i.test(message) ? 'JSON 格式不正确，请检查括号、引号和逗号是否完整' : message
   const position = Number(match[1])
   const before = input.value.slice(0, position)
   const line = before.split('\n').length
   const column = position - (before.lastIndexOf('\n') + 1) + 1
-  return `${message}（第 ${line} 行，第 ${column} 列）`
+  return `JSON 格式不正确（第 ${line} 行，第 ${column} 列），请检查附近的括号、引号或逗号`
 }
 
 // ElUpload 仅负责统一文件选择交互，文件仍在当前浏览器本地读取。

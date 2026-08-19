@@ -18,7 +18,7 @@ watch(activeTag, () => { currentPage.value = 1 })
 <template>
   <div class="sr-page content-list-page">
     <section class="list-heading">
-      <div><p>TOOLS</p><h1>小工具</h1><span>所有计算均在当前浏览器内完成，不会上传你的输入内容。</span></div>
+      <div><p>实用工具</p><h1>小工具</h1><span>所有计算均在当前浏览器内完成，不会上传你的输入内容。</span></div>
       <strong>{{ filteredTools.length }} ITEMS</strong>
     </section>
     <div class="content-filter" aria-label="按标签筛选">
@@ -29,4 +29,3 @@ watch(activeTag, () => { currentPage.value = 1 })
     <el-pagination v-if="filteredTools.length > PAGE_SIZE" v-model:current-page="currentPage" class="content-pagination" background layout="prev, pager, next" :page-size="PAGE_SIZE" :total="filteredTools.length" />
   </div>
 </template>
-

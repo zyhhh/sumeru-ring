@@ -99,7 +99,7 @@ async function importJson(uploadFile: UploadFile) {
     ElMessage.success(`成功导入 ${data.length} 条网址`)
     await reload()
   } catch (error) {
-    ElMessage.error(error instanceof Error ? error.message : '导入失败')
+    ElMessage.error(error instanceof SyntaxError ? '导入失败：文件内容不是有效的网址数据' : error instanceof Error ? error.message : '导入失败')
   }
 }
 

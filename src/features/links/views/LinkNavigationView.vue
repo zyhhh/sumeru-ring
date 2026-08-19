@@ -33,7 +33,7 @@ onMounted(async () => {
 <template>
   <div v-loading="loading" class="sr-page content-list-page">
     <section class="list-heading">
-      <div><p>LINKS</p><h1>网址导航</h1><span>集中浏览常用站点，网址数据仅保存在当前浏览器。</span></div>
+      <div><p>常用网址</p><h1>网址导航</h1><span>集中浏览常用站点，网址数据仅保存在当前浏览器。</span></div>
       <RouterLink to="/links/manage"><el-button class="sr-primary-button" type="primary"><Settings :size="16" />管理网址</el-button></RouterLink>
     </section>
     <div class="content-filter" aria-label="按分类筛选">
@@ -44,4 +44,3 @@ onMounted(async () => {
     <el-pagination v-if="filteredLinks.length > PAGE_SIZE" v-model:current-page="currentPage" class="content-pagination" background layout="prev, pager, next" :page-size="PAGE_SIZE" :total="filteredLinks.length" />
   </div>
 </template>
-
