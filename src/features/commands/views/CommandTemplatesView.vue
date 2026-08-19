@@ -147,7 +147,7 @@ async function copy() { if (Object.keys(errors.value).length) return ElMessage.w
   </section>
   <section class="result sr-panel"><div class="output-title"><div><strong>实时命令预览</strong><span>根据左侧选择自动更新</span></div></div>
     <div v-if="risk" class="risk"><AlertTriangle :size="18"/><div><strong>执行前请确认风险</strong><span>{{risk}}</span></div></div><pre :class="{empty:!!Object.keys(errors).length}"><code><span v-for="(part,index) in commandParts" :key="index" :class="`token-${part.type}`">{{part.value}}</span></code></pre>
-    <el-button class="copy-command" type="primary" :disabled="!!Object.keys(errors).length" @click="copy"><Copy :size="17"/>一键复制命令</el-button>
+    <el-button class="copy-command" :disabled="!!Object.keys(errors).length" @click="copy"><Copy :size="17"/>一键复制命令</el-button>
     <p class="local-note"><Check :size="15"/>这里只负责生成命令，不会自动执行，也不会上传填写的内容。</p>
     <details class="explanation" open><summary>这条命令会做什么？</summary><ol><li v-for="item in explanation" :key="item">{{item}}</li></ol></details>
   </section></div>

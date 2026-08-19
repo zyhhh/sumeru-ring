@@ -166,6 +166,34 @@ a { color: inherit; text-decoration: none; }
 .el-select__wrapper.is-focused,
 .el-textarea__inner:focus { box-shadow: 0 0 0 1px var(--sr-blue) inset !important; }
 
+/* 选择与数值控件沿用按钮的尺寸、圆角和蓝色选中语义。 */
+.el-tabs__header { margin: 0 0 18px; }
+.el-tabs__nav-wrap::after { height: 1px; background: var(--sr-border); }
+.el-tabs__item { height: 40px; padding: 0 16px; color: var(--sr-text-muted); font-size: var(--sr-font-body); font-weight: 600; }
+.el-tabs__item:hover,
+.el-tabs__item.is-active { color: var(--sr-blue); }
+.el-tabs__active-bar { height: 2px; background: var(--sr-blue); }
+
+.el-input-number {
+  width: 150px;
+  border: 1px solid var(--sr-border);
+  border-radius: var(--sr-radius-control);
+  overflow: hidden;
+  background: var(--sr-surface-soft);
+}
+.el-input-number .el-input__wrapper { border-radius: 0 !important; box-shadow: none !important; }
+.el-input-number__decrease,
+.el-input-number__increase { border-color: var(--sr-border) !important; background: var(--sr-surface-soft) !important; color: var(--sr-text-muted) !important; }
+.el-input-number__decrease:hover,
+.el-input-number__increase:hover { background: var(--sr-blue-soft) !important; color: var(--sr-blue) !important; }
+.el-input-number__decrease { border-radius: var(--sr-radius-control) 0 0 var(--sr-radius-control); }
+.el-input-number__increase { border-radius: 0 var(--sr-radius-control) var(--sr-radius-control) 0; }
+.el-input-number.is-disabled { opacity: .55; }
+
+.el-switch.is-checked .el-switch__core { border-color: var(--sr-blue) !important; background: var(--sr-blue) !important; }
+.el-color-picker__trigger { border-color: var(--sr-border) !important; border-radius: var(--sr-radius-control) !important; background: var(--sr-surface); }
+.el-color-picker__trigger:hover { border-color: var(--sr-blue) !important; }
+
 @media (max-width: 720px) {
   .sr-page { padding: 20px 14px 36px; }
   .content-grid { grid-template-columns: 1fr; }
