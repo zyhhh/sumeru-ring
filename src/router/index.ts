@@ -10,6 +10,7 @@ const router = createRouter({
     { path: '/commands', name: 'command-templates', component: () => import('@/features/commands/views/CommandTemplatesView.vue'), meta: { navigation: 'commands' } },
     { path: '/snippets', name: 'snippets', component: () => import('@/features/snippets/views/SnippetLibraryView.vue'), meta: { navigation: 'snippets' } },
     { path: '/cheatsheets', name: 'cheatsheets', component: () => import('@/features/cheatsheets/views/CheatsheetView.vue'), meta: { navigation: 'cheatsheets' } },
+    { path: '/leisure', name: 'leisure', component: () => import('@/features/leisure/views/LeisureView.vue'), meta: { navigation: 'leisure' } },
     { path: '/links', name: 'links', component: () => import('@/features/links/views/LinkNavigationView.vue'), meta: { navigation: 'links' } },
     { path: '/links/manage', name: 'link-manager', component: () => import('@/features/links/views/LinkManagerView.vue'), meta: { navigation: 'links' } },
     { path: '/:pathMatch(.*)*', redirect: '/' },

@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { BookOpenCheck, FileCode2, PanelLeftClose, PanelLeftOpen, Search, X, Sun, Moon, LayoutGrid, Wrench, Star, History, ExternalLink, TerminalSquare } from 'lucide-vue-next'
+import { BookOpenCheck, Coffee, FileCode2, PanelLeftClose, PanelLeftOpen, Search, X, Sun, Moon, LayoutGrid, Wrench, Star, History, ExternalLink, TerminalSquare } from 'lucide-vue-next'
 import { contentRegistry } from '@/registry/contentRegistry'
 import { searchUnifiedContent } from '@/registry/contentCatalog'
 import { usePreferencesStore } from '@/stores/preferences'
 import { initializeLinks, listLinks } from '@/features/links/linkRepository'
 import type { LinkItem } from '@/features/links/types'
+import { listSnippets } from '@/features/snippets/snippetRepository'
+import { cheatsheets } from '@/features/cheatsheets/cheatsheetData'
 
 const router = useRouter()
 const route = useRoute()
@@ -15,8 +17,11 @@ const search = ref('')
 const searchOpen = ref(false)
 const searchInput = ref<HTMLInputElement>()
 const links = ref<LinkItem[]>([])
+const snippetCount = ref(0)
 const results = ref<{ id: string; title: string; description: string; target: string; external: boolean; type: string }[]>([])
 const toolCount = contentRegistry.filter((item) => item.type === 'tool').length
+const commandCount = 4
+const cheatsheetCount = cheatsheets.length
 const typeLabels: Record<string, string> = { tool: '内置工具', link: '网址', 'command-template': '命令模板', snippet: '代码片段', cheatsheet: '速查表' }
 const activeNavigation = computed(() => route.meta.navigation)
 
@@ -47,10 +52,14 @@ watch(search, async (value) => {
   results.value = items.map((item) => ({ id: item.id, title: item.title, description: `${typeLabels[item.type]} · ${item.description}`, target: item.target, external: item.external, type: item.type }))
 })
 
-onMounted(async () => {
+async function refreshNavigationCounts() {
   await initializeLinks()
   links.value = await listLinks()
-})
+  snippetCount.value = listSnippets().length
+}
+
+onMounted(refreshNavigationCounts)
+watch(() => route.fullPath, refreshNavigationCounts)
 </script>
 
 <template>
@@ -84,9 +93,10 @@ onMounted(async () => {
         <div class="nav-label">内容类型</div>
         <RouterLink to="/tools" :class="{ 'is-active': activeNavigation === 'tools' }"><Wrench :size="17" /><span>小工具</span><small>{{ toolCount }}</small></RouterLink>
         <RouterLink to="/links" :class="{ 'is-active': activeNavigation === 'links' }"><ExternalLink :size="17" /><span>网址导航</span><small>{{ links.length }}</small></RouterLink>
-        <RouterLink to="/commands" :class="{ 'is-active': activeNavigation === 'commands' }"><TerminalSquare :size="17" /><span>命令模板</span><small>4</small></RouterLink>
-        <RouterLink to="/snippets" :class="{ 'is-active': activeNavigation === 'snippets' }"><FileCode2 :size="17" /><span>代码片段</span></RouterLink>
-        <RouterLink to="/cheatsheets" :class="{ 'is-active': activeNavigation === 'cheatsheets' }"><BookOpenCheck :size="17" /><span>速查表</span><small>4</small></RouterLink>
+        <RouterLink to="/commands" :class="{ 'is-active': activeNavigation === 'commands' }"><TerminalSquare :size="17" /><span>命令模板</span><small>{{ commandCount }}</small></RouterLink>
+        <RouterLink to="/snippets" :class="{ 'is-active': activeNavigation === 'snippets' }"><FileCode2 :size="17" /><span>代码片段</span><small>{{ snippetCount }}</small></RouterLink>
+        <RouterLink to="/cheatsheets" :class="{ 'is-active': activeNavigation === 'cheatsheets' }"><BookOpenCheck :size="17" /><span>速查表</span><small>{{ cheatsheetCount }}</small></RouterLink>
+        <RouterLink to="/leisure" :class="{ 'is-active': activeNavigation === 'leisure' }"><Coffee :size="17" /><span>休息一下</span><small>4</small></RouterLink>
       </nav>
     </aside>
 
